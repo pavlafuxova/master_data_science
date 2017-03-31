@@ -1,1 +1,13 @@
 This is a short story about consumption of coffee
+Per Capita coffe consumption in Europe in 2013 (kg green coffee equivalent)
+
+Finland *12
+Austria *9
+Sweden *7
+Germany *7
+Netherlands *6
+Estonia *6
+Italy *5
+Croatia *5
+France *4
+Spain *4
