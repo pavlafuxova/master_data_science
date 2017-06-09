@@ -1,0 +1,19 @@
+#Extract the date of the worst aviation disaster from: 
+#https://en.wikipedia.org/wiki/List_of_accidents_and_disasters_by_death_toll
+
+library(rvest)
+library(xml2)
+
+url <- "https://en.wikipedia.org/wiki/List_of_accidents_and_disasters_by_death_toll"
+accidents <- read_html(url)
+accidents <- html_nodes(accidents, "table")
+
+#Overview of the tables
+length(accidents)
+sapply(accidents, function(x) dim(html_table(x, fill = TRUE)))
+
+accidents <- html_table(accidents[[3]], header = T)
+
+#Order deaths
+accidents <- accidents[order(accidents$Deaths, decreasing = T),]
+head(accidents, 1)
