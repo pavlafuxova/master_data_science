@@ -1,0 +1,45 @@
+# TUBERCULOSIS EVOLUTION 1980 - 2008
+
+#Reading a file and getting a overview of the data
+tuber <- read.table(url("http://stat405.had.co.nz/data/tb.csv"), header = T, sep = ",")
+head(tuber)
+colnames(tuber)
+str(tuber)
+dim(tuber)
+
+#Rename column of group and age
+names(tuber) <- gsub("new_sp_f", "female_", names(tuber))
+names(tuber) <- gsub("new_sp_m", "male_", names(tuber))
+names(tuber)[3] <- "u_u"
+
+# Reshaping the table
+tuber2 <- melt(tuber, id.vars = c("iso2", "year"))
+summary(tuber2$variable)
+names(tuber2)[3] <- "group_age"
+
+#splitting column "group_age" into two columns
+#option 1
+library(stringr)
+tuber2$group <- str_split_fixed(tuber2$group_age, "_", 2)
+
+#option2
+library(tidyr)
+tuber2 <- tuber2 %>% separate(group_age, c("group", "age"))
+
+#let's have a look at the quality of the data -> 68% of lines contain NA values
+sum(is.na(tuber2))
+dim(tuber2)
+tuber3 <- na.omit(tuber2)
+
+# CALCULATION
+# Number of cases per country and year and visualize it
+#option1
+tmp <- tapply(tuber2$value, tuber2$year, sum, na.rm = T)
+#option2
+tmp <- ddply(tuber3, .(year), summarize, total = sum(value))
+
+library(ggplot2)
+ggplot(tmp, aes(x = year, y = total)) + geom_point(color = "red") +
+  theme_light() +
+  ggtitle("Evolution of the Tuberculosis iin the country from 1980 till 2008")+
+  
